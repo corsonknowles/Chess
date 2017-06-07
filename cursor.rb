@@ -38,11 +38,22 @@ class Cursor
     @cursor_pos = cursor_pos
     @board = board
     @selected = false
+    # @picked_up_a_piece = nil
   end
 
   def get_input
     key = KEYMAP[read_char]
     handle_key(key)
+  end
+
+  def [](pos)
+    x, y = pos
+    self[x, y]
+  end
+
+  def []=(position, val)
+    x, y = position
+    self[x, y] = val
   end
 
   private
@@ -78,8 +89,15 @@ class Cursor
 
   def handle_key(key)
     case key
-    when :return
-      toggle_selected
+    when :return, :space
+      if @selected
+        possible_move = @cursor_pos
+        selected_piece = @board[@selected]
+        if selected_piece.moves.include?(possible_move)
+          @board.move_piece(@selected, @cursor_pos)
+        end
+      end
+      toggle_selected(@cursor_pos)
       @cursor_pos
     when :left
       update_pos(MOVES[:left])
@@ -89,9 +107,6 @@ class Cursor
       update_pos(MOVES[:up])
     when :down
       update_pos(MOVES[:down])
-    when :space
-      toggle_selected
-      @cursor_pos
     when :ctrl_c
       Process.exit(0)
   # else
@@ -114,9 +129,16 @@ class Cursor
     "X"
   end
 
-  def toggle_selected
-    @selected = !@selected
-
+  def toggle_selected(position = nil)
+    if @selected
+      @selected = false
+    else
+      @selected = position
+    end
+    # puts @selected
+    # @pick_up_piece =
+    # @selected = !@selected
+    #return a position or store or mark a position
   end
 
 end

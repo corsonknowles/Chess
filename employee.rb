@@ -1,4 +1,4 @@
-# Write a class Employee that has attributes that return the employee's name, title, salary, and boss.
+gi# Write a class Employee that has attributes that return the employee's name, title, salary, and boss.
 #
 # Write another class, Manager, that extends Employee. Manager should have an attribute that holds an array of all employees assigned to the manager. Note that managers might report to higher level managers, of course.
 #
